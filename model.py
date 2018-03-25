@@ -47,3 +47,34 @@ def create_model(predictors, label, max_sequence_len, total_words):
 	model.fit(predictors, label, epochs=100, verbose=1, callbacks=[earlystop])
 	print model.summary()
 	return model 
+
+def generate_text(seed_text, next_words, max_sequence_len):
+	for _ in range(next_words):
+		token_list = tokenizer.texts_to_sequences([seed_text])[0]
+		token_list = pad_sequences([token_list], maxlen=max_sequence_len-1, padding='pre')
+		predicted = model.predict_classes(token_list, verbose=0)
+		
+		output_word = ""
+		for word, index in tokenizer.word_index.items():
+			if index == predicted:
+				output_word = word
+				break
+		seed_text += " " + output_word
+	return seed_text
+
+data = """The cat and her kittens
+They put on their mittens,
+To eat a christmas pie.
+The poor little kittens
+They lost their mittens,
+And then they began to cry.
+
+"O mother dear, we sadly fear
+We cannot go to-day,
+For we have lost our mittens."
+"If it be so, ye shall not go,
+For ye are naughty kittens."""
+
+predictors, label, max_sequence_len, total_words = dataset_preparation(data)
+model = create_model(predictors, label, max_sequence_len, total_words)
+print generate_text("we naughty", 3, max_sequence_len)
