@@ -1,5 +1,5 @@
 from keras.preprocessing.sequence import pad_sequences
-from keras.layers import Embedding, LSTM, Dense
+from keras.layers import Embedding, LSTM, Dense, Dropout
 from keras.preprocessing.text import Tokenizer
 from keras.callbacks import EarlyStopping
 from keras.models import Sequential
@@ -39,7 +39,9 @@ def create_model(predictors, label, max_sequence_len, total_words):
 	
 	model = Sequential()
 	model.add(Embedding(total_words, 10, input_length=max_sequence_len-1))
-	model.add(LSTM(150))
+	model.add(LSTM(150, return_sequences = True))
+	# model.add(Dropout(0.2))
+	model.add(LSTM(100))
 	model.add(Dense(total_words, activation='softmax'))
 
 	model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
