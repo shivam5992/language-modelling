@@ -64,18 +64,9 @@ def generate_text(seed_text, next_words, max_sequence_len):
 		seed_text += " " + output_word
 	return seed_text
 
-data = """The cat and her kittens
-They put on their mittens,
-To eat a christmas pie.
-The poor little kittens
-They lost their mittens,
-And then they began to cry.
 
-"O mother dear, we sadly fear
-We cannot go to-day,
-For we have lost our mittens."
-"If it be so, ye shall not go,
-For ye are naughty kittens."""
+
+data = open('data.txt').read()
 
 predictors, label, max_sequence_len, total_words = dataset_preparation(data)
 model = create_model(predictors, label, max_sequence_len, total_words)
